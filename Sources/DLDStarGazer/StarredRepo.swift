@@ -8,35 +8,42 @@
 import Foundation
 
 public struct StarredRepo: Codable {
-    public let name: String
-    public let fullName: String
-    public let owner: Owner
-    public let htmlURL: URL
+    public let name     : String
+    public let fullName : String
+    public let owner    : Owner
+    public let htmlURL  : URL
     public let createdAt: Date
     public let updatedAt: Date
-    public let cloneURL: URL
-    public let topics: [String]
+    public let cloneURL : URL
+    public let tagsURL  : URL
+    public let topics   : [String]
+    
+    public var tags: [RepoTag] = []
+    
+//    public var latestTag: String { }
     
     private enum CodingKeys: String, CodingKey {
         case name
-        case fullName = "full_name"
+        case fullName  = "full_name"
         case owner
-        case htmlURL = "html_url"
+        case htmlURL   = "html_url"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
-        case cloneURL = "clone_url"
+        case cloneURL  = "clone_url"
+        case tagsURL   = "tags_url"
         case topics
     }
     
-    public init(name: String, fullName: String, owner: StarredRepo.Owner, htmlURL: URL, createdAt: Date, updatedAt: Date, cloneURL: URL, topics: [String]) {
-        self.name = name
-        self.fullName = fullName
-        self.owner = owner
-        self.htmlURL = htmlURL
+    public init(name: String, fullName: String, owner: StarredRepo.Owner, htmlURL: URL, createdAt: Date, updatedAt: Date, cloneURL: URL, tagsURL: URL, topics: [String]) {
+        self.name      = name
+        self.fullName  = fullName
+        self.owner     = owner
+        self.htmlURL   = htmlURL
         self.createdAt = createdAt
         self.updatedAt = updatedAt
-        self.cloneURL = cloneURL
-        self.topics = topics
+        self.cloneURL  = cloneURL
+        self.tagsURL   = tagsURL
+        self.topics    = topics
     }
 }
 
@@ -49,6 +56,15 @@ extension StarredRepo: Identifiable, Hashable {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(fullName)
+    }
+}
+
+extension StarredRepo {
+    func withTags(_ tags: [RepoTag]) -> StarredRepo {
+        var repo = self
+        repo.tags = tags
+        
+        return repo
     }
 }
 
